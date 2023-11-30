@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -24,9 +25,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kr.ac.kumoh.ce.s20190467.s23w1203lazylist.ui.theme.S23W1203LazyListTheme
 
+data class Song(var title: String, var singer: String)
+private val songs = mutableListOf<Song>()
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        repeat(10) {
+            songs.add(Song("테스형", "나훈아"))
+            songs.add(Song("소주 한 잔", "임창정"))
+            songs.add(Song("사랑에 연습이 있었다면", "임재현"))
+        }
         setContent {
             MainScreen()
         }
@@ -47,16 +56,15 @@ fun MainScreen(){
 }
 
 @Composable
-fun SongItem(index: Int) {
+fun SongItem(song: Song) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xffffffcc))
             .padding(16.dp)
-    //주의! background,padding 패딩 순서에 따라 달라짐
     ) {
-        TextTitle("노래 $index")
-        TextSinger("이 노래를 부른 가수는 $index 입니다")
+        TextTitle("노래 ${song.title}")
+        TextSinger("이 노래를 부른 가수는 ${song.singer} 입니다")
     }
 }
 
@@ -76,22 +84,8 @@ fun MyList() {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
-        items(30) {
+        items(songs) {
             SongItem(it)
         }
     }
 }
-//@Composable
-//fun MyList() {
-//    LazyColumn() {
-//        items(30) {
-//            TextTitle("노래 $it") // it 람다함수 파라미터 생략가능
-//            TextSinger("이 노래를 부른 가수는 $it 입니다")
-//        }
-////        //원래
-////        items(30) {index->
-////            TextTitle("노래 $index")
-////        }
-//
-//    }
-//}
